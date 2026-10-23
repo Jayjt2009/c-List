@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <pwd.h>
 #include <grp.h>
+#include <time.h>
 
 int show_all = 0;
 int long_list = 0;
@@ -50,8 +51,18 @@ void print_long(const char *dir, const char *name)
     const char *user = pw ? pw->pw_name : "?";
     const char *group = gr ? gr->gr_name : "?";
 
-    printf("%s %s %s %s\n", 
-            modes, user, group, name);
+    char timebuf[64];
+    struct tm *tm = localtime(&st.st_mtim.tv_sec);
+    strftime(timebuf, sizeof(timebuf), "%b %d %H:%M", tm);
+
+    printf("%s %lu %s %s %ld %s %s\n", 
+            modes,
+            (unsigned long)st.st_nlink,
+            user,
+            group,
+            (long)st.st_size,
+            timebuf,
+            name);
 }
 
 int main(int argc, char *argv[])
