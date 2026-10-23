@@ -8,7 +8,7 @@
 #include <time.h>
 
 int show_all = 0;
-int long_list = 0;
+int long_format = 0;
 
 void mode_string(mode_t mode, char *str)
 {
@@ -68,13 +68,16 @@ void print_long(const char *dir, const char *name)
 int main(int argc, char *argv[])
 {
     int opt;
-    while ((opt = getopt(argc, argv, "a")) != -1) {
+    while ((opt = getopt(argc, argv, "al")) != -1) {
         switch (opt) {
             case 'a':
                 show_all = 1;
                 break;
+            case 'l':
+                long_format = 1;
+                break;
             default:
-                fprintf(stderr, "Usage: %s [-a] [path] \n",
+                fprintf(stderr, "Usage: %s [-al] [path] \n",
                         argv[0]);
                 return 1;
         }
@@ -89,8 +92,10 @@ int main(int argc, char *argv[])
     struct dirent *entry;
     while((entry = readdir(dir)) != NULL) {
         if (!show_all && entry->d_name[0] == '.') continue;
-        print_long(path, entry->d_name);
-        // printf("%s \n", entry->d_name);
+        if (long_format)
+            print_long(path, entry->d_name);
+        else
+            printf("%s \n", entry->d_name);
     }
     
     
