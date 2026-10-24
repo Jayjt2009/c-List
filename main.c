@@ -62,8 +62,7 @@ void print_long(const char *dir, const char *name)
     const char *user, *group;
     if(num_ids) {
         snprintf(uidbuf, sizeof(uidbuf), "%u", (unsigned)st.st_uid);
-        // struct passwd *pw = getpwuid(st.st_uid);
-        // struct group  *gr = getgrgid(st.st_gid);
+        snprintf(gidbuf, sizeof(gidbuf), "%u", (unsigned)st.st_gid);
         user =  uidbuf;
         group = gidbuf;
     } else {
